@@ -59,46 +59,18 @@ public class AutoService extends AccessibilityService {
         frameLayout.setBackgroundColor(0XFFF2F2F2);
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         frameLayout.findViewById(R.id.action1).setOnClickListener(view -> {
-            new Thread(() -> {
-                    // 截屏 Photoshop 坐标
-            for (int i = 0; i < 20; i++) {
-                // 截屏 Photoshop 坐标
-                click(1012, 1436);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                click(356, 1980);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                click(868, 1320);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            }).start();
+            ClickUtils.watchVideos(this);
         });
         frameLayout.findViewById(R.id.action2).setOnClickListener(view -> {
-            mHandler.postDelayed(() -> {
-                // 截屏 Photoshop 坐标
-                for (int i = 0; i < 7; i++) {
-                    // 截屏 Photoshop 坐标
-                    click(807, 992 + 188* i);
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, 100);
+            ClickUtils.watchBooks(this);
         });
         frameLayout.findViewById(R.id.action3).setOnClickListener(view -> {
+            ClickUtils.watchSpecifyVideos(this);
+        });
+        frameLayout.findViewById(R.id.action4).setOnClickListener(view -> {
+
+        });
+        frameLayout.findViewById(R.id.action_exit_to_app).setOnClickListener(view -> {
             windowManager.removeView(frameLayout);
             stopSelf();
         });
@@ -135,46 +107,8 @@ public class AutoService extends AccessibilityService {
 //        }, 5000);
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
-    public void click(int x, int y) {
-        GestureDescription.Builder builder = new GestureDescription.Builder();
-        Path p = new Path();
-        p.moveTo(x, y);
-        builder.addStroke(new GestureDescription.StrokeDescription(p, 0, ViewConfiguration.getTapTimeout()));
-        GestureDescription gesture = builder.build();
-        boolean isDispatched = dispatchGesture(gesture, new GestureResultCallback() {
-            @Override
-            public void onCompleted(GestureDescription gestureDescription) {
-                super.onCompleted(gestureDescription);
-            }
 
-            @Override
-            public void onCancelled(GestureDescription gestureDescription) {
-                super.onCancelled(gestureDescription);
-            }
-        }, null);
-    }
 
-    @TargetApi(Build.VERSION_CODES.N)
-    public void swipe(int x1, int y1, int x2, int y2) {
-        GestureDescription.Builder builder = new GestureDescription.Builder();
-        Path p = new Path();
-        p.moveTo(x1, y1);
-        p.lineTo(x2, y2);
-        builder.addStroke(new GestureDescription.StrokeDescription(p, 0, ViewConfiguration.getTapTimeout()));
-        GestureDescription gesture = builder.build();
-        boolean isDispatched = dispatchGesture(gesture, new GestureResultCallback() {
-            @Override
-            public void onCompleted(GestureDescription gestureDescription) {
-                super.onCompleted(gestureDescription);
-            }
-
-            @Override
-            public void onCancelled(GestureDescription gestureDescription) {
-                super.onCancelled(gestureDescription);
-            }
-        }, null);
-    }
 
     @Override
     public void onInterrupt() {

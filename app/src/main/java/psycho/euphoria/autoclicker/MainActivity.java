@@ -39,6 +39,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static psycho.euphoria.autoclicker.Shared.requestAccessibilityPermission;
+
 // 编辑运行配置 Deloy 下面 3 个复选都选上
 public class MainActivity extends Activity {
 
@@ -49,8 +51,12 @@ public class MainActivity extends Activity {
             Shared.requestOverlayPermission(this);
         }
         stopService(new Intent(this, AutoService.class));
-        Shared.requestAccessibilityPermission(this, AutoService.class);
 
+        if(Shared.isDeviceRooted()){
+            requestAccessibilityPermission(this, AutoService.class);
+        }else {
+            requestAccessibilityPermission(this);
+        }
 
     }
     // adb shell am start -a android.settings.ACCESSIBILITY_SETTINGS

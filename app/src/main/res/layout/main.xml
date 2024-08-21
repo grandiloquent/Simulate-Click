@@ -2,27 +2,48 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <ImageButton
         android:id="@+id/action1"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@null"
-        android:src="@drawable/ic_action_play_arrow" />
+        android:src="@drawable/ic_action_1" />
 
     <ImageButton
         android:id="@+id/action2"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@null"
-        android:src="@drawable/ic_action_play_arrow" />
+        android:src="@drawable/ic_action_2" />
 
     <ImageButton
         android:id="@+id/action3"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@null"
-        android:src="@drawable/ic_action_play_arrow" />
+        android:src="@drawable/ic_action_3" />
+
+    <ImageButton
+        android:id="@+id/action4"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:src="@drawable/ic_action_4" />
+
+    <ImageButton
+        android:id="@+id/action5"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:src="@drawable/ic_action_5" />
+
+    <ImageButton
+        android:id="@+id/action_exit_to_app"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:src="@drawable/ic_action_exit_to_app" />
 
 </LinearLayout>
