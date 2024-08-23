@@ -1,65 +1,91 @@
 package psycho.euphoria.autoclicker;
 
-import android.accessibilityservice.AccessibilityServiceInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Path;
-import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.GestureDescription;
-import android.annotation.TargetApi;
+import android.Manifest.permission;
 import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PixelFormat;
+import android.content.pm.PackageManager;
+import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.storage.StorageManager;
 import android.provider.Settings;
-import android.text.Layout;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityManager;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.List;
-
+import static android.os.Build.VERSION.SDK_INT;
 import static psycho.euphoria.autoclicker.Shared.requestAccessibilityPermission;
+import static psycho.euphoria.autoclicker.Utils.startScreenRecorder;
 
 // 编辑运行配置 Deloy 下面 3 个复选都选上
 public class MainActivity extends Activity {
+    private static final int REQUEST_CODE_SCREEN_CAPTURE = 1;
+
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("B5aOx2", String.format("onActivityResult, %s", ""));
+        if (REQUEST_CODE_SCREEN_CAPTURE == requestCode) {
+            if (resultCode != Activity.RESULT_OK) {
+                // when no permission
+                Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                return;
+            }
+            startScreenRecorder(this, resultCode, data);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (VERSION.SDK_INT >= VERSION_CODES.M) {
+        if (SDK_INT >= VERSION_CODES.M) {
             Shared.requestOverlayPermission(this);
         }
         stopService(new Intent(this, AutoService.class));
-
-        if(Shared.isDeviceRooted()){
+        if (Shared.isDeviceRooted()) {
             requestAccessibilityPermission(this, AutoService.class);
-        }else {
+        } else {
             requestAccessibilityPermission(this);
         }
+        if (SDK_INT >= 30) {
+            if (!Environment.isExternalStorageManager()) {
+                try {
+                    Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
+                    startActivity(intent);
+                } catch (Exception ex) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    startActivity(intent);
+                }
+            }
+        } else {
+            if (checkSelfPermission(permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        permission.WRITE_EXTERNAL_STORAGE
+                }, 0);
+
+            }
+        }
+        if (checkSelfPermission(permission.KILL_BACKGROUND_PROCESSES) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{
+                    permission.KILL_BACKGROUND_PROCESSES
+            }, 0);
+        }
+        createScreenshotRequest();
+    }
+
+    // 创建截屏请求
+    private void createScreenshotRequest() {
+        final MediaProjectionManager manager
+                = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        final Intent permissionIntent = manager.createScreenCaptureIntent();
+        startActivityForResult(permissionIntent, REQUEST_CODE_SCREEN_CAPTURE);
 
     }
-    // adb shell am start -a android.settings.ACCESSIBILITY_SETTINGS
-    // https://developer.android.com/guide/topics/ui/accessibility/service
 
 }

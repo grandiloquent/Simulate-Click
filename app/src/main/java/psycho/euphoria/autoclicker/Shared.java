@@ -1,7 +1,6 @@
 package psycho.euphoria.autoclicker;
 
 import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.AccessibilityService.GestureResultCallback;
 import android.accessibilityservice.GestureDescription;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -12,9 +11,9 @@ import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
+import android.os.Environment;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -201,13 +200,11 @@ public class Shared {
         Path clickPath = new Path();
         GestureDescription.Builder clickBuilder = new GestureDescription.Builder();
         clickPath.moveTo(x, y);
-
         clickBuilder.addStroke(
-               new GestureDescription.StrokeDescription(
+                new GestureDescription.StrokeDescription(
                         clickPath,
-                        0,500));
-
-        service.dispatchGesture(clickBuilder.build(),null,null);
+                        0, 500));
+        service.dispatchGesture(clickBuilder.build(), null, null);
 
     }
 
@@ -305,5 +302,25 @@ public class Shared {
 
     public static void requestRoot() {
         execCmd("exit", true);
+    }
+
+    public static File getUniqueFile(String extension) {
+        File dir = Environment.getExternalStorageDirectory();
+        File path;
+        int name = 1;
+        do {
+            path = new File(dir, padLeft(Integer.toString(name), 3).replace(' ', '0') + extension);
+            name++;
+
+        } while (path.exists());
+        return path;
+    }
+
+    public static String padRight(String s, int n) {
+        return String.format("%-" + n + "s", s);
+    }
+
+    public static String padLeft(String s, int n) {
+        return String.format("%" + n + "s", s);
     }
 }
