@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Path;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -20,9 +22,12 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ViewConfiguration;
 import android.view.accessibility.AccessibilityManager;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.Buffer;
@@ -31,7 +36,7 @@ import java.util.Random;
 public class ClickUtils {
 
     @TargetApi(Build.VERSION_CODES.N)
-    public void click(AccessibilityService accessibilityService, int x, int y) {
+    public static void click(AccessibilityService accessibilityService, int x, int y) {
         GestureDescription.Builder builder = new GestureDescription.Builder();
         Path p = new Path();
         p.moveTo(x, y);
@@ -140,6 +145,8 @@ public class ClickUtils {
         //MediaProjection mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
     }
 
+    static boolean founded = false;
+
     public static void screenShoot(final Intent intent, String name, final DisplayMetrics metrics, MediaProjectionManager mediaProjectionManager, Handler handler) {
         final int resultCode = intent.getIntExtra(name, 0);
         final MediaProjection projection = mediaProjectionManager.getMediaProjection(resultCode, intent);
@@ -149,8 +156,13 @@ public class ClickUtils {
             final ImageReader ir = ImageReader.newInstance(width, height, 0x01, 1);
             VirtualDisplay vd = projection.createVirtualDisplay("screen", width, height, metrics.densityDpi,
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, ir.getSurface(), null, null);
-            //  @Override
+            founded = false;
             ir.setOnImageAvailableListener(reader -> {
+                projection.stop();
+                if (founded) {
+                    return;
+                }
+                founded = true;
                 Image image = null;
                 FileOutputStream fos = null;
                 Bitmap bitmap = null;
@@ -172,7 +184,62 @@ public class ClickUtils {
 
                 } catch (Exception e) {
                 }
+
+            }, handler);
+        }
+
+    }
+
+    public static void screenShoot1(final Intent intent, String name, final DisplayMetrics metrics, MediaProjectionManager mediaProjectionManager, Handler handler, AccessibilityService accessibilityService) {
+        Log.e("B5aOx2", String.format("screenShoot1, %s", ""));
+        final int resultCode = intent.getIntExtra(name, 0);
+        final MediaProjection projection = mediaProjectionManager.getMediaProjection(resultCode, intent);
+        if (projection != null) {
+            int width = metrics.widthPixels;
+            int height = metrics.heightPixels;
+            final ImageReader ir = ImageReader.newInstance(width, height, 0x01, 1);
+            VirtualDisplay vd = projection.createVirtualDisplay("screen", width, height, metrics.densityDpi,
+                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, ir.getSurface(), null, null);
+            //  @Override
+            founded = false;
+            ir.setOnImageAvailableListener(reader -> {
                 projection.stop();
+                if (founded) {
+                    return;
+                }
+                founded = true;
+                Image image = null;
+                Bitmap bitmap = null;
+                try {
+                    image = ir.acquireLatestImage();
+                    final Image.Plane[] planes = image.getPlanes();
+                    final Buffer buffer = planes[0].getBuffer().rewind();
+                    int pixelStride = planes[0].getPixelStride();
+                    int rowStride = planes[0].getRowStride();
+                    int rowPadding = rowStride - pixelStride * ir.getWidth();
+                    bitmap = Bitmap.createBitmap(ir.getWidth() + rowPadding / pixelStride,
+                            ir.getHeight(), Bitmap.Config.ARGB_8888);
+                    bitmap.copyPixelsFromBuffer(buffer);
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    bitmap.compress(CompressFormat.JPEG, 85, out);
+                    bitmap.recycle();
+                    Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+                    int j1 = decoded.getPixel(762, 75);
+                    int j2 = decoded.getPixel(762, 80);
+                    if (j1 == -3486517 && j2 == -3486517) {
+                        click(accessibilityService, 957, 67);
+                    }
+                    j1 = decoded.getPixel(415, 750);
+                    j2 = decoded.getPixel(410, 748);
+                    if (j1 == -13756916 && j2 == -1302) {
+                        click(accessibilityService, 500, 1200);
+                    }
+                    decoded.recycle();
+                    image.close();
+
+                } catch (Exception e) {
+                }
+
             }, handler);
         }
 

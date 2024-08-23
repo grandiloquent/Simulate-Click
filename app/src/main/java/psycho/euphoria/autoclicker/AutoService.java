@@ -81,7 +81,14 @@ public class AutoService extends AccessibilityService {
             ClickUtils.watchBooks(this);
         });
         frameLayout.findViewById(R.id.action3).setOnClickListener(view -> {
-            ClickUtils.watchSpecifyVideos(this);
+            new Thread(() -> {
+                ClickUtils.screenShoot1(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
+                try {
+                    Thread.sleep(15 * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }).start();
         });
         frameLayout.findViewById(R.id.action5).setOnClickListener(view -> {
             ClickUtils.screenShoot(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler);
