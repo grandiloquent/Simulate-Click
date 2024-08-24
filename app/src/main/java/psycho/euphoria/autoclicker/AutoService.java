@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,21 +49,54 @@ public class AutoService extends AccessibilityService {
     private static final String BASE = "psycho.euphoria.autoclicker.";
     public static final String ACTION_START = BASE + "ACTION_START";
     public static final String EXTRA_RESULT_CODE = BASE + "EXTRA_RESULT_CODE";
+    public static final String ACTION_1 = BASE + "ACTION_1";
+    public static final String ACTION_2 = BASE + "ACTION_2";
+    public static final String ACTION_3 = BASE + "ACTION_3";
+    public static final String ACTION_4 = BASE + "ACTION_4";
+    public static final String ACTION_5 = BASE + "ACTION_5";
+    public static final String ACTION_6 = BASE + "ACTION_6";
+    public static final String ACTION_7 = BASE + "ACTION_7";
+    public static final String ACTION_8 = BASE + "ACTION_8";
+    public static final String ACTION_9 = BASE + "ACTION_9";
+    public static final String ACTION_10 = BASE + "ACTION_10";
     private static final Object sSync = new Object();
     Handler mHandler;
     private MediaProjectionManager mMediaProjectionManager;
     private Intent mIntent;
 
     private void createNotificationChannel() {
+        RemoteViews notificationLayout = new RemoteViews(getPackageName(), R.layout.notification_small);
+        notificationLayout.setOnClickPendingIntent(R.id.action1, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_1), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action2, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_2), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action3, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_3), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action4, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_4), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action5, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_5), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action6, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_6), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action7, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_7), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action8, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_8), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action9, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_9), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action10, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_10), PendingIntent.FLAG_IMMUTABLE));
         Notification.Builder builder = new Notification.Builder(this.getApplicationContext()); //获取一个Notification构造器
-        Intent nfIntent = new Intent(this, MainActivity.class); //点击后跳转的界面，可以设置跳转数据
-        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0)) // 设置PendingIntent
-                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_launcher)) // 设置下拉列表中的图标(大图标)
-                //.setContentTitle("SMI InstantView") // 设置下拉列表里的标题
-                .setSmallIcon(R.mipmap.ic_launcher) // 设置状态栏内的小图标
-                .setContentText("is running......") // 设置上下文内容
-                .setWhen(System.currentTimeMillis()); // 设置该通知发生的时间
-
+//        Intent nfIntent = new Intent(this, MainActivity.class); //点击后跳转的界面，可以设置跳转数据
+//        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0)) // 设置PendingIntent
+//                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_launcher)) // 设置下拉列表中的图标(大图标)
+//                //.setContentTitle("SMI InstantView") // 设置下拉列表里的标题
+//                .setSmallIcon(R.mipmap.ic_launcher) // 设置状态栏内的小图标
+//                .setContentText("is running......") // 设置上下文内容
+//                .setWhen(System.currentTimeMillis()); // 设置该通知发生的时间
+        builder.setContentTitle("笔记")
+                .setSmallIcon(android.R.drawable.stat_sys_download)
+                .setCustomContentView(notificationLayout);
         /*以下是对Android 8.0的适配*/
         //普通notification适配
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -93,7 +127,7 @@ public class AutoService extends AccessibilityService {
         super.onCreate();
         mMediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         mHandler = new Handler(getMainLooper());
-        LayoutParams layoutParams = Shared.createOverlayLayoutParams();
+/*        LayoutParams layoutParams = Shared.createOverlayLayoutParams();
         layoutParams.width = LayoutParams.WRAP_CONTENT;//getResources().getDisplayMetrics().widthPixels;
         layoutParams.height = LayoutParams.WRAP_CONTENT;
         layoutParams.x = 900;
@@ -164,8 +198,7 @@ public class AutoService extends AccessibilityService {
             stopSelf();
         });
 //
-        windowManager.addView(frameLayout, layoutParams);
-
+        windowManager.addView(frameLayout, layoutParams);*/
     }
 
     @Override
@@ -180,12 +213,32 @@ public class AutoService extends AccessibilityService {
 
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
-        int result = START_STICKY;
+        int result = START_NOT_STICKY;
         final String action = intent != null ? intent.getAction() : null;
         if (ACTION_START.equals(action)) {
             createNotificationChannel();
             mIntent = intent;
             //updateStatus();
+        } else if (ACTION_1.equals(action)) {
+            action1();
+        } else if (ACTION_2.equals(action)) {
+            action2();
+        } else if (ACTION_3.equals(action)) {
+            action3();
+        } else if (ACTION_4.equals(action)) {
+            action4();
+        } else if (ACTION_5.equals(action)) {
+            action5();
+        } else if (ACTION_6.equals(action)) {
+            action6();
+        } else if (ACTION_7.equals(action)) {
+            action7();
+        } else if (ACTION_8.equals(action)) {
+            action8();
+        } else if (ACTION_9.equals(action)) {
+            action9();
+        } else if (ACTION_10.equals(action)) {
+            action10();
         }
         return result;
     }
@@ -195,4 +248,61 @@ public class AutoService extends AccessibilityService {
         Log.e("B5aOx2", String.format("onUnbind, %s", ""));
         return super.onUnbind(intent);
     }
+
+    void action1() {
+        ClickUtils.watchVideos(this);
+    }
+
+    void action2() {
+        ClickUtils.watchBooks(this);
+    }
+
+    void action3() {
+        new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                ClickUtils.screenShoot1(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
+                try {
+                    Thread.sleep(ClickUtils.getRandomNumber(10, 15) * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    void action4() {
+        new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                ClickUtils.screenShoot2(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
+                try {
+                    Thread.sleep(ClickUtils.getRandomNumber(10, 15) * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    void action5() {
+        ClickUtils.screenShoot(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler);
+    }
+
+    void action6() {
+        requestAccessibilityPermission(this);
+    }
+
+    void action7() {
+        stopForeground(true);
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+    void action8() {
+    }
+
+    void action9() {
+    }
+
+    void action10() {
+    }
+
 }
