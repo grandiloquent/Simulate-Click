@@ -14,6 +14,7 @@ import android.os.Build.VERSION_CODES;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -125,6 +126,18 @@ public class Shared {
         return execCmd(new String[]{command}, isRoot, true);
     }
 
+    public static File getUniqueFile(String extension) {
+        File dir = Environment.getExternalStorageDirectory();
+        File path;
+        int name = 1;
+        do {
+            path = new File(dir, padLeft(Integer.toString(name), 3).replace(' ', '0') + extension);
+            name++;
+
+        } while (path.exists());
+        return path;
+    }
+
     public static boolean isAccessibilitySettingsOn(Context context, Class<? extends android.accessibilityservice.AccessibilityService> clazz) {
         int accessibilityEnabled = 0;
         final String service = context.getPackageName() + "/" + clazz.getCanonicalName();
@@ -151,6 +164,18 @@ public class Shared {
         return false;
     }
 
+    public static boolean isDeviceRooted() {
+        String su = "su";
+        String[] locations = {"/system/bin/", "/system/xbin/", "/sbin/", "/system/sd/xbin/",
+                "/system/bin/failsafe/", "/data/local/xbin/", "/data/local/bin/", "/data/local/"};
+        for (String location : locations) {
+            if (new File(location + su).exists()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void longTapAt(float x, float y, AccessibilityService service) {
         Path clickPath = new Path();
         clickPath.moveTo(x, y);
@@ -168,6 +193,14 @@ public class Shared {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             service.dispatchGesture(clickBuilder.build(), null, null);
         }
+    }
+
+    public static String padLeft(String s, int n) {
+        return String.format("%" + n + "s", s);
+    }
+
+    public static String padRight(String s, int n) {
+        return String.format("%-" + n + "s", s);
     }
 
     public static void requestAccessibilityPermission(Context context) {
@@ -194,6 +227,10 @@ public class Shared {
             intent.setData(Uri.parse("package:" + context.getPackageName()));
             context.startActivity(intent);
         }
+    }
+
+    public static void requestRoot() {
+        execCmd("exit", true);
     }
 
     public static void singleTapAt(float x, float y, AccessibilityService service) {
@@ -286,41 +323,5 @@ public class Shared {
             }
             return false;
         }
-    }
-
-    public static boolean isDeviceRooted() {
-        String su = "su";
-        String[] locations = {"/system/bin/", "/system/xbin/", "/sbin/", "/system/sd/xbin/",
-                "/system/bin/failsafe/", "/data/local/xbin/", "/data/local/bin/", "/data/local/"};
-        for (String location : locations) {
-            if (new File(location + su).exists()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void requestRoot() {
-        execCmd("exit", true);
-    }
-
-    public static File getUniqueFile(String extension) {
-        File dir = Environment.getExternalStorageDirectory();
-        File path;
-        int name = 1;
-        do {
-            path = new File(dir, padLeft(Integer.toString(name), 3).replace(' ', '0') + extension);
-            name++;
-
-        } while (path.exists());
-        return path;
-    }
-
-    public static String padRight(String s, int n) {
-        return String.format("%-" + n + "s", s);
-    }
-
-    public static String padLeft(String s, int n) {
-        return String.format("%" + n + "s", s);
     }
 }

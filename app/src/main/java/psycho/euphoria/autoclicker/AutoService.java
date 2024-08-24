@@ -42,6 +42,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Comparator;
 
+import static psycho.euphoria.autoclicker.Shared.requestAccessibilityPermission;
+
 public class AutoService extends AccessibilityService {
     private static final String BASE = "psycho.euphoria.autoclicker.";
     public static final String ACTION_START = BASE + "ACTION_START";
@@ -49,7 +51,33 @@ public class AutoService extends AccessibilityService {
     private static final Object sSync = new Object();
     Handler mHandler;
     private MediaProjectionManager mMediaProjectionManager;
+    private Intent mIntent;
 
+    private void createNotificationChannel() {
+        Notification.Builder builder = new Notification.Builder(this.getApplicationContext()); //获取一个Notification构造器
+        Intent nfIntent = new Intent(this, MainActivity.class); //点击后跳转的界面，可以设置跳转数据
+        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0)) // 设置PendingIntent
+                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_launcher)) // 设置下拉列表中的图标(大图标)
+                //.setContentTitle("SMI InstantView") // 设置下拉列表里的标题
+                .setSmallIcon(R.mipmap.ic_launcher) // 设置状态栏内的小图标
+                .setContentText("is running......") // 设置上下文内容
+                .setWhen(System.currentTimeMillis()); // 设置该通知发生的时间
+
+        /*以下是对Android 8.0的适配*/
+        //普通notification适配
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId("notification_id");
+        }
+        //前台服务notification适配
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationChannel channel = new NotificationChannel("notification_id", "notification_name", NotificationManager.IMPORTANCE_LOW);
+            notificationManager.createNotificationChannel(channel);
+        }
+        Notification notification = builder.build(); // 获取构建好的Notification
+        notification.defaults = Notification.DEFAULT_SOUND; //设置为默认的声音
+        startForeground(110, notification);
+    }
 
     @Override
     protected void onServiceConnected() {
@@ -68,8 +96,8 @@ public class AutoService extends AccessibilityService {
         LayoutParams layoutParams = Shared.createOverlayLayoutParams();
         layoutParams.width = LayoutParams.WRAP_CONTENT;//getResources().getDisplayMetrics().widthPixels;
         layoutParams.height = LayoutParams.WRAP_CONTENT;
-        layoutParams.x = 100;
-        layoutParams.y = 100;
+        layoutParams.x = 900;
+        layoutParams.y = 200;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
         LinearLayout frameLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.main, null);
         frameLayout.setBackgroundColor(0XFFF2F2F2);
@@ -82,16 +110,33 @@ public class AutoService extends AccessibilityService {
         });
         frameLayout.findViewById(R.id.action3).setOnClickListener(view -> {
             new Thread(() -> {
-                ClickUtils.screenShoot1(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
-                try {
-                    Thread.sleep(15 * 1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                for (int i = 0; i < 1000; i++) {
+                    ClickUtils.screenShoot1(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
+                    try {
+                        Thread.sleep(ClickUtils.getRandomNumber(10, 15) * 1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
+        });
+        frameLayout.findViewById(R.id.action4).setOnClickListener(view -> {
+            new Thread(() -> {
+                for (int i = 0; i < 1000; i++) {
+                    ClickUtils.screenShoot2(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
+                    try {
+                        Thread.sleep(ClickUtils.getRandomNumber(10, 15) * 1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }).start();
         });
         frameLayout.findViewById(R.id.action5).setOnClickListener(view -> {
             ClickUtils.screenShoot(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler);
+        });
+        frameLayout.findViewById(R.id.action6).setOnClickListener(view -> {
+            requestAccessibilityPermission(this);
         });
         frameLayout.findViewById(R.id.action_exit_to_app).setOnClickListener(view -> {
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -133,8 +178,6 @@ public class AutoService extends AccessibilityService {
         super.onRebind(intent);
     }
 
-    private Intent mIntent;
-
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
         int result = START_STICKY;
@@ -145,32 +188,6 @@ public class AutoService extends AccessibilityService {
             //updateStatus();
         }
         return result;
-    }
-
-    private void createNotificationChannel() {
-        Notification.Builder builder = new Notification.Builder(this.getApplicationContext()); //获取一个Notification构造器
-        Intent nfIntent = new Intent(this, MainActivity.class); //点击后跳转的界面，可以设置跳转数据
-        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0)) // 设置PendingIntent
-                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_launcher)) // 设置下拉列表中的图标(大图标)
-                //.setContentTitle("SMI InstantView") // 设置下拉列表里的标题
-                .setSmallIcon(R.mipmap.ic_launcher) // 设置状态栏内的小图标
-                .setContentText("is running......") // 设置上下文内容
-                .setWhen(System.currentTimeMillis()); // 设置该通知发生的时间
-
-        /*以下是对Android 8.0的适配*/
-        //普通notification适配
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId("notification_id");
-        }
-        //前台服务notification适配
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            NotificationChannel channel = new NotificationChannel("notification_id", "notification_name", NotificationManager.IMPORTANCE_LOW);
-            notificationManager.createNotificationChannel(channel);
-        }
-        Notification notification = builder.build(); // 获取构建好的Notification
-        notification.defaults = Notification.DEFAULT_SOUND; //设置为默认的声音
-        startForeground(110, notification);
     }
 
     @Override

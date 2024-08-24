@@ -24,11 +24,19 @@ import static psycho.euphoria.autoclicker.Utils.startScreenRecorder;
 public class MainActivity extends Activity {
     private static final int REQUEST_CODE_SCREEN_CAPTURE = 1;
 
+    // 创建截屏请求
+    private void createScreenshotRequest() {
+        final MediaProjectionManager manager
+                = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        final Intent permissionIntent = manager.createScreenCaptureIntent();
+        startActivityForResult(permissionIntent, REQUEST_CODE_SCREEN_CAPTURE);
+
+    }
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.e("B5aOx2", String.format("onActivityResult, %s", ""));
+
         if (REQUEST_CODE_SCREEN_CAPTURE == requestCode) {
             if (resultCode != Activity.RESULT_OK) {
                 // when no permission
@@ -77,15 +85,6 @@ public class MainActivity extends Activity {
             }, 0);
         }
         createScreenshotRequest();
-    }
-
-    // 创建截屏请求
-    private void createScreenshotRequest() {
-        final MediaProjectionManager manager
-                = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        final Intent permissionIntent = manager.createScreenCaptureIntent();
-        startActivityForResult(permissionIntent, REQUEST_CODE_SCREEN_CAPTURE);
-
     }
 
 }

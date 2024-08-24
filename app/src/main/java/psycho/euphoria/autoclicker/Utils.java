@@ -2,6 +2,7 @@ package psycho.euphoria.autoclicker;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
 import android.util.Pair;
@@ -9,6 +10,8 @@ import android.util.Pair;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static psycho.euphoria.autoclicker.Shared.requestAccessibilityPermission;
 
 public class Utils {
 
@@ -37,6 +40,7 @@ public class Utils {
         intent.putExtra(AutoService.EXTRA_RESULT_CODE, resultCode);
         intent.putExtras(data);
         context.startService(intent);
+
     }
 
     private void listLargestDirectories() {
@@ -61,5 +65,63 @@ public class Utils {
                 Log.e("B5aOx2", String.format("onCreate, %s == %s", p.first, p.second));
             }
         }).start();
+    }
+
+    public static boolean compareColor(int color, int red, int redOffset, int green, int greenOffset, int blue, int blueOffset) {
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = color & 0xFF;
+        Log.e("B5aOx2", String.format("compareColor, %s %s %s %s", color, r, g, b));
+        if (redOffset == 0 && r != red) {
+            return false;
+        }
+        if (greenOffset == 0 && g != green) {
+            return false;
+        }
+        if (blueOffset == 0 && b != blue) {
+            return false;
+        }
+        if (r < red - redOffset || r > red + redOffset) {
+            return false;
+        }
+        if (g < green - greenOffset || g > green + greenOffset) {
+            return false;
+        }
+        if (b < blue - blueOffset || b > blue + blueOffset) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean compareColor(Bitmap bitmap, int x, int y, int red, int redOffset, int green, int greenOffset, int blue, int blueOffset) {
+        return compareColor(bitmap.getPixel(x, y), red, redOffset, green, greenOffset, blue, blueOffset);
+    }
+
+    public static boolean compareColor(Bitmap bitmap, int x, int y, int color) {
+        int j = bitmap.getPixel(x, y);
+        return j == color;
+    }
+
+    public static void dumpColor(Bitmap bitmap, int x, int y) {
+        int color = bitmap.getPixel(x, y);
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = color & 0xFF;
+        Log.e("B5aOx2", String.format("dumpColor, %sx%s = %s = %s,%s,%s", x, y, color, r, g, b));
+    }
+
+    public static boolean compareColor(Bitmap bitmap, int... values) {
+        for (int i = 0; i < values.length; i += 3) {
+            if (!compareColor(bitmap, values[i], values[i + 1], values[i + 2])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void dumpColor(Bitmap bitmap, int... values) {
+        for (int i = 0; i < values.length; i += 2) {
+            dumpColor(bitmap, values[i], values[i + 1]);
+        }
     }
 }
