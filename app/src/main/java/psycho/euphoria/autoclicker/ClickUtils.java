@@ -218,7 +218,7 @@ public class ClickUtils {
                     bitmap.compress(CompressFormat.JPEG, 85, out);
                     bitmap.recycle();
                     Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-                    if (compareColor(20, decoded,
+                    if (compareColor(40, decoded,
                             810, 79, -1185811,
                             816, 70, -659467,
                             928, 76, -263681)) {
@@ -242,10 +242,33 @@ public class ClickUtils {
                     if (compareColor(20, decoded,
                             79, 127, -16711423,
                             71, 128, -1,
-                            462, 1844, -13135929)) {
+                            462, 1844, -13135929
+                    ) || compareColor(20, decoded,
+                            79, 127, -16711423,
+                            71, 128, -1,
+                            462, 1844, -1245185
+                    )
+                    ) {
                         Log.e("B5aOx2", String.format("screenShoot2, %s", "4"));
-                        click(accessibilityService, getRandomNumber(46, 77), getRandomNumber(113, 160));
+                        click(accessibilityService, getRandomNumber(49, 60), getRandomNumber(127, 137));
+                        Thread.sleep(1000);
                     }
+                    //=============================================================t
+                    if (compareColor(60, decoded,
+                            100, 77, -3085,
+                            117, 73, -11,
+                            150, 65, -1974813)) {
+                        Log.e("B5aOx2", String.format("screenShoot2, %s", "5"));
+                        click(accessibilityService, getRandomNumber(123, 394), getRandomNumber(62, 102));
+                    }
+                    if (compareColor(20, decoded,
+                            481, 1216, -6447715,
+                            479, 1238, -5789785,
+                            597, 1216, -131587)) {
+                        Log.e("B5aOx2", String.format("screenShoot2, %s", "6"));
+                        click(accessibilityService, getRandomNumber(264, 836), getRandomNumber(1153, 1221));
+                    }
+                    //=============================================================k
                     decoded.recycle();
                     image.close();
 
@@ -258,7 +281,6 @@ public class ClickUtils {
     }
 
     public static void screenShoot11(final Intent intent, String name, final DisplayMetrics metrics, MediaProjectionManager mediaProjectionManager, Handler handler, AccessibilityService accessibilityService) {
-        Log.e("B5aOx2", String.format("screenShoot11, %s", ""));
         final int resultCode = intent.getIntExtra(name, 0);
         final MediaProjection projection = mediaProjectionManager.getMediaProjection(resultCode, intent);
         if (projection != null) {
@@ -270,7 +292,6 @@ public class ClickUtils {
             //  @Override
             founded = false;
             ir.setOnImageAvailableListener(reader -> {
-                Log.e("B5aOx2", String.format("screenShoot1, %s", "1"));
                 projection.stop();
                 if (founded) {
                     return;
@@ -292,33 +313,110 @@ public class ClickUtils {
                     bitmap.compress(CompressFormat.JPEG, 85, out);
                     bitmap.recycle();
                     Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-                    dumpColor(decoded, 253, 146,
-                            340, 177,
-                            187, 163);
-                    if (compareColor(60, decoded,
-                            253, 146, -1,
-                            340, 177, -1,
-                            187, 163, -1
+                    if (compareColor(20, decoded,
+                            834, 227, -10785,
+                            797, 220, -444056,
+                            925, 221, -10779)) {
+                        Log.e("B5aOx2", String.format("screenShoot11, %s", "1"));
+                        click(accessibilityService, getRandomNumber(835, 991), getRandomNumber(226, 292));
+                        Thread.sleep(3000);
+                    }
+                    if (compareColor(40, decoded,
+                            164, 148, -1315859,
+                            166, 174, -1973275,
+                            389, 148, -1)) {
+                        Log.e("B5aOx2", String.format("screenShoot11, %s", "2"));
+                        click(accessibilityService, getRandomNumber(121, 391), getRandomNumber(156, 201));
+                        Thread.sleep(1000);
+                    }
+                    if (compareColor(20, decoded,
+                            482, 1389, -5395027,
+                            482, 1411, -5789785,
+                            593, 1385, -131587)) {
+                        Log.e("B5aOx2", String.format("screenShoot11, %s", "3"));
+                        click(accessibilityService, getRandomNumber(479, 602), getRandomNumber(1528, 1555));
+                        Thread.sleep(1000);
+                    }
+                    if (compareColor(20, decoded,
+                            483, 1281, -6184543,
+                            482, 1304, -7237231,
+                            596, 1280, -1)) {
+                        Log.e("B5aOx2", String.format("screenShoot11, %s", "4"));
+                        click(accessibilityService, getRandomNumber(273, 810), getRandomNumber(1272, 1346));
+                        Thread.sleep(1000);
+                    }
+//                    if (compareColor(20, decoded,
+//                            945, 1975, -52377,
+//                            964, 1981, -117147,
+//                            959, 1998, -574876)) {
+//                        Log.e("B5aOx2", String.format("screenShoot11, %s", "5"));
+//                        click(accessibilityService, getRandomNumber(1011, 1025), getRandomNumber(144, 155));
+//                    }
+                    if (compareColor(20, decoded,
+                            925, 345, -789527,
+                            956, 347, -262149,
+                            973, 346, -1537)) {
+                        Log.e("B5aOx2", String.format("screenShoot11, %s", "5"));
+                        click(accessibilityService, getRandomNumber(1011, 1025), getRandomNumber(144, 155));
+
+                    }
+                    if (compareColor(20, decoded,
+                            481, 1304, -7368817,
+                            482, 1284, -6974059,
+                            490, 1273, -1)) {
+                        Log.e("B5aOx2", String.format("screenShoot11, %s", "6"));
+                        click(accessibilityService, getRandomNumber(268, 796), getRandomNumber(1280, 1336));
+                        Thread.sleep(1000);
+                    }
+//                    if (compareColor(20, decoded,
+//                            190, 730, -1,
+//                            190, 731, -1,
+//                            190, 732, -1,
+//                            190, 733, -1,
+//                            190, 734, -1,
+//                            190, 735, -1,
+//                            190, 950, -1,
+//                            190, 951, -1,
+//                            890, 952, -1,
+//                            890, 953, -1,
+//                            890, 954, -1,
+//                            890, 955, -1
+//                    )) {
+//                        Log.e("B5aOx2", String.format("screenShoot11, %s", "7"));
+//                        click(accessibilityService, getRandomNumber(276, 804), getRandomNumber(1300, 1356));
+//                        Thread.sleep(1000);
+//                    }
+                    if (compareColor(20, decoded,
+                            288, 691, -1,
+                            288, 692, -1,
+                            288, 693, -1,
+                            288, 694, -1,
+                            288, 695, -1,
+                            288, 696, -1,
+                            850, 981, -1,
+                            850, 982, -1,
+                            850, 983, -1,
+                            850, 984, -1,
+                            850, 985, -1,
+                            850, 986, -1
                     )
-                    ) {
-                        Log.e("B5aOx2", String.format("screenShoot2, %s", "1"));
-                        click(accessibilityService, getRandomNumber(132, 376), getRandomNumber(165, 190));
-                    }
-                    if (compareColor(20, decoded,
-                            485, 1297, -6447715,
-                            483, 1291, -5789785,
-                            483, 1279, -657931
+                            && !compareColor(20, decoded,
+                            208, 691, -1,
+                            208, 692, -1,
+                            208, 693, -1,
+                            208, 694, -1,
+                            208, 695, -1,
+                            208, 696, -1,
+                            870, 981, -1,
+                            870, 982, -1,
+                            870, 983, -1,
+                            870, 984, -1,
+                            870, 985, -1,
+                            870, 986, -1
                     )) {
-                        Log.e("B5aOx2", String.format("screenShoot2, %s", "2"));
-                        click(accessibilityService, getRandomNumber(300, 780), getRandomNumber(1300, 1330));
-                    }
-                    if (compareColor(20, decoded,
-                            512, 1323, -5921371,
-                            524, 1320, -6842473,
-                            520, 1318, -263173
-                    )) {
-                        Log.e("B5aOx2", String.format("screenShoot2, %s", "3"));
-                        click(accessibilityService, getRandomNumber(300, 780), getRandomNumber(1320, 1380));
+                        Log.e("B5aOx2", String.format("screenShoot11, %s", "8"));
+                        click(accessibilityService, getRandomNumber(515, 570), getRandomNumber(1515, 1525));
+                        Thread.sleep(1000);
                     }
                     decoded.recycle();
                     image.close();
