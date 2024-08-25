@@ -218,71 +218,33 @@ public class ClickUtils {
                     bitmap.compress(CompressFormat.JPEG, 85, out);
                     bitmap.recycle();
                     Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-                    int j1 = decoded.getPixel(811, 92);
-                    int j2 = decoded.getPixel(850, 92);
-                    int j3 = decoded.getPixel(860, 92);
-                    /*Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j1, Color.red(j1),
-                            Color.green(j1),
-                            Color.blue(j1)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j2, Color.red(j2),
-                            Color.green(j2),
-                            Color.blue(j2)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j3, Color.red(j3),
-                            Color.green(j3),
-                            Color.blue(j3)));*/
-                    if ((Color.red(j1) > 200 && Color.green(j1) > 200 && Color.blue(j1) > 200) &&
-                            (Color.red(j2) > 200 && Color.green(j2) > 200 && Color.blue(j2) > 200) &&
-                            (Color.red(j3) > 200 && Color.green(j3) > 200 && Color.blue(j3) > 200)) {
-                        Log.e("B5aOx2", String.format("screenShoot11, %s", "xxxxxxxxxxxxx1"));
-                        click(accessibilityService, getRandomNumber(800, 900), getRandomNumber(100, 120));
+                    if (compareColor(20, decoded,
+                            810, 79, -1185811,
+                            816, 70, -659467,
+                            928, 76, -263681)) {
+                        Log.e("B5aOx2", String.format("screenShoot2, %s", "1"));
+                        click(accessibilityService, getRandomNumber(821, 989), getRandomNumber(90, 117));
                     }
-                    j1 = decoded.getPixel(452, 1218);
-                    j2 = decoded.getPixel(452, 1373);
-                    j3 = decoded.getPixel(623, 1375);
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j1, Color.red(j1),
-                            Color.green(j1),
-                            Color.blue(j1)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j2, Color.red(j2),
-                            Color.green(j2),
-                            Color.blue(j2)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j3, Color.red(j3),
-                            Color.green(j3),
-                            Color.blue(j3)));
-                    if ((Color.red(j1) > 200 && Color.green(j1) > 200 && Color.blue(j1) > 200) &&
-                            (Color.red(j2) > 200 && Color.green(j2) > 200 && Color.blue(j2) > 200) &&
-                            (Color.red(j3) == 95 && Color.green(j3) == 97 && Color.blue(j3) == 96)) {
-                        Log.e("B5aOx2", String.format("screenShoot11, %s", "xxxxxxxxxxxxx2"));
-                        click(accessibilityService, getRandomNumber(360, 760), getRandomNumber(1260, 1320));
+                    if (compareColor(20, decoded,
+                            469, 1299, -10592674,
+                            471, 1272, -11053225,
+                            608, 1273, -394759)) {
+                        Log.e("B5aOx2", String.format("screenShoot2, %s", "2"));
+                        click(accessibilityService, getRandomNumber(293, 759), getRandomNumber(1173, 1254));
                     }
-                    j1 = decoded.getPixel(150, 1360);
-                    j2 = decoded.getPixel(452, 1318);
-                    j3 = decoded.getPixel(623, 1319);
-                    /*Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j1, Color.red(j1),
-                            Color.green(j1),
-                            Color.blue(j1)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j2, Color.red(j2),
-                            Color.green(j2),
-                            Color.blue(j2)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j3, Color.red(j3),
-                            Color.green(j3),
-                            Color.blue(j3)));*/
-                    if ((Color.red(j1) > 200 && Color.green(j1) > 200 && Color.blue(j1) > 200) &&
-                            (Color.red(j2) == 83 && Color.green(j2) == 59 && Color.blue(j2) == 47) &&
-                            (Color.red(j3) == 70 && Color.green(j3) == 36 && Color.blue(j3) == 24)) {
-                        Log.e("B5aOx2", String.format("screenShoot11, %s", "xxxxxxxxxxxxx3"));
-                        click(accessibilityService, getRandomNumber(360, 760), getRandomNumber(1200, 1260));
+                    if (compareColor(20, decoded,
+                            469, 1256, -7502973,
+                            471, 1230, -8423306,
+                            608, 1230, -131587)) {
+                        Log.e("B5aOx2", String.format("screenShoot2, %s", "3"));
+                        click(accessibilityService, getRandomNumber(285, 794), getRandomNumber(1142, 1245));
                     }
-                    if (compareColor(decoded,
-                            95, 151, -15197406,
-                            95, 149, -14868441,
-                            81, 151, -263173) &&
-                            !compareColor(decoded, 437, 157, -14737885,
-                                    439, 116, -14606298,
-                                    636, 117, -14474712
-                            )
-                    ) {
+                    if (compareColor(20, decoded,
+                            79, 127, -16711423,
+                            71, 128, -1,
+                            462, 1844, -13135929)) {
                         Log.e("B5aOx2", String.format("screenShoot2, %s", "4"));
-                        click(accessibilityService, getRandomNumber(64, 84), getRandomNumber(160, 180));
+                        click(accessibilityService, getRandomNumber(46, 77), getRandomNumber(113, 160));
                     }
                     decoded.recycle();
                     image.close();
@@ -296,6 +258,7 @@ public class ClickUtils {
     }
 
     public static void screenShoot11(final Intent intent, String name, final DisplayMetrics metrics, MediaProjectionManager mediaProjectionManager, Handler handler, AccessibilityService accessibilityService) {
+        Log.e("B5aOx2", String.format("screenShoot11, %s", ""));
         final int resultCode = intent.getIntExtra(name, 0);
         final MediaProjection projection = mediaProjectionManager.getMediaProjection(resultCode, intent);
         if (projection != null) {
@@ -329,59 +292,33 @@ public class ClickUtils {
                     bitmap.compress(CompressFormat.JPEG, 85, out);
                     bitmap.recycle();
                     Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
-                    int j1 = decoded.getPixel(164, 148);
-                    int j2 = decoded.getPixel(193, 169);
-                    int j3 = decoded.getPixel(205, 172);
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j1, Color.red(j1),
-                            Color.green(j1),
-                            Color.blue(j1)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j2, Color.red(j2),
-                            Color.green(j2),
-                            Color.blue(j2)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j3, Color.red(j3),
-                            Color.green(j3),
-                            Color.blue(j3)));
-                    if ((Color.red(j1) > 200 && Color.green(j1) > 200 && Color.blue(j1) > 200) &&
-                            (Color.red(j2) > 200 && Color.green(j2) > 200 && Color.blue(j2) > 200) &&
-                            (Color.red(j3) > 200 && Color.green(j3) > 200 && Color.blue(j3) > 200)) {
-                        //Log.e("B5aOx2", String.format("screenShoot1, %s", "3"));
-                        click(accessibilityService, getRandomNumber(120, 300), getRandomNumber(150, 190));
+                    dumpColor(decoded, 253, 146,
+                            340, 177,
+                            187, 163);
+                    if (compareColor(60, decoded,
+                            253, 146, -1,
+                            340, 177, -1,
+                            187, 163, -1
+                    )
+                    ) {
+                        Log.e("B5aOx2", String.format("screenShoot2, %s", "1"));
+                        click(accessibilityService, getRandomNumber(132, 376), getRandomNumber(165, 190));
                     }
-                    j1 = decoded.getPixel(481, 1304);
-                    j2 = decoded.getPixel(506, 1304);
-                    j3 = decoded.getPixel(203, 1352);
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j1, Color.red(j1),
-                            Color.green(j1),
-                            Color.blue(j1)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j2, Color.red(j2),
-                            Color.green(j2),
-                            Color.blue(j2)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j3, Color.red(j3),
-                            Color.green(j3),
-                            Color.blue(j3)));
-                    if ((Color.red(j1) == 171 && Color.green(j1) == 171 && Color.blue(j1) == 171) &&
-                            (Color.red(j2) == 154 && Color.green(j2) == 154 && Color.blue(j2) == 154) &&
-                            (Color.red(j3) > 190 && Color.green(j3) > 190 && Color.blue(j3) > 190)) {
-                        Log.e("B5aOx2", String.format("screenShoot11, %s", "xxxxxxxxxxxxx"));
-                        click(accessibilityService, getRandomNumber(360, 760), getRandomNumber(1260, 1340));
+                    if (compareColor(20, decoded,
+                            485, 1297, -6447715,
+                            483, 1291, -5789785,
+                            483, 1279, -657931
+                    )) {
+                        Log.e("B5aOx2", String.format("screenShoot2, %s", "2"));
+                        click(accessibilityService, getRandomNumber(300, 780), getRandomNumber(1300, 1330));
                     }
-                    j1 = decoded.getPixel(482, 1346);
-                    j2 = decoded.getPixel(482, 1325);
-                    j3 = decoded.getPixel(494, 1346);
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j1, Color.red(j1),
-                            Color.green(j1),
-                            Color.blue(j1)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j2, Color.red(j2),
-                            Color.green(j2),
-                            Color.blue(j2)));
-                    Log.e("B5aOx2", String.format("screenShoot1, %s %s %s %s", j3, Color.red(j3),
-                            Color.green(j3),
-                            Color.blue(j3)));
-                    if ((Color.red(j1) == 154 && Color.green(j1) == 154 && Color.blue(j1) == 154) &&
-                            (Color.red(j2) == 157 && Color.green(j2) == 157 && Color.blue(j2) == 157) &&
-                            (Color.red(j3) == 157 && Color.green(j3) == 157 && Color.blue(j3) == 157)) {
-                        Log.e("B5aOx2", String.format("screenShoot11, %s", "xxxxxxxxxxxxx"));
-                        click(accessibilityService, getRandomNumber(360, 760), getRandomNumber(1320, 1360));
+                    if (compareColor(20, decoded,
+                            512, 1323, -5921371,
+                            524, 1320, -6842473,
+                            520, 1318, -263173
+                    )) {
+                        Log.e("B5aOx2", String.format("screenShoot2, %s", "3"));
+                        click(accessibilityService, getRandomNumber(300, 780), getRandomNumber(1320, 1380));
                     }
                     decoded.recycle();
                     image.close();

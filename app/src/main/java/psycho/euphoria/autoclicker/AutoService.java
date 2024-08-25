@@ -34,6 +34,7 @@ import android.view.WindowManager.LayoutParams;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -260,7 +261,7 @@ public class AutoService extends AccessibilityService {
     void action3() {
         new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                ClickUtils.screenShoot1(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
+                ClickUtils.screenShoot11(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
                 try {
                     Thread.sleep(ClickUtils.getRandomNumber(10, 15) * 1000);
                 } catch (InterruptedException e) {
@@ -284,7 +285,11 @@ public class AutoService extends AccessibilityService {
     }
 
     void action5() {
-        ClickUtils.screenShoot(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler);
+        mHandler.postDelayed(() -> {
+            ClickUtils.screenShoot(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler);
+            Toast.makeText(this, "完成", Toast.LENGTH_SHORT).show();
+        }, 3000);
+
     }
 
     void action6() {

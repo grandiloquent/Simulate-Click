@@ -107,12 +107,33 @@ public class Utils {
         int r = (color >> 16) & 0xFF;
         int g = (color >> 8) & 0xFF;
         int b = color & 0xFF;
-        Log.e("B5aOx2", String.format("dumpColor, %sx%s = %s = %s,%s,%s", x, y, color, r, g, b));
+        Log.e("B5aOx2", String.format("dumpColor, %s,%s,%s = %s,%s,%s", x, y, color, r, g, b));
     }
 
     public static boolean compareColor(Bitmap bitmap, int... values) {
         for (int i = 0; i < values.length; i += 3) {
             if (!compareColor(bitmap, values[i], values[i + 1], values[i + 2])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean compareColor(int offset, Bitmap bitmap, int... values) {
+        for (int i = 0; i < values.length; i += 3) {
+            int color = values[i + 2];
+            int red = (color >> 16) & 0xFF;
+            int green = (color >> 8) & 0xFF;
+            int blue = color & 0xFF;
+            Log.e("B5aOx2", String.format("compareColor, %s %s %s", red,green,blue));
+            int value = bitmap.getPixel(values[i], values[i + 1]);
+            int r = (value >> 16) & 0xFF;
+            int g = (value >> 8) & 0xFF;
+            int b = value & 0xFF;
+            if (r < red - offset || r > red + offset ||
+                    g < green - offset || g > green + offset ||
+                    b < blue - offset || b > blue + offset
+            ) {
                 return false;
             }
         }

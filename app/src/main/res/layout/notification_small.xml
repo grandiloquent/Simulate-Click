@@ -43,7 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="动作5" />
+            android:text="截屏" />
 
     </LinearLayout>
 
@@ -58,13 +58,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="动作6" />
+            android:text="服务" />
         <TextView
             android:id="@+id/action7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="动作7" />
+            android:text="退出" />
         <TextView
             android:id="@+id/action8"
             android:layout_width="0dp"
