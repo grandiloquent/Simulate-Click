@@ -127,7 +127,8 @@ public class Shared {
     }
 
     public static File getUniqueFile(String extension) {
-        File dir = Environment.getExternalStorageDirectory();
+        File dir = new File(Environment.getExternalStorageDirectory(), "DCIM/Screenshots");
+        if (!dir.isDirectory()) dir.mkdirs();
         File path;
         int name = 1;
         do {

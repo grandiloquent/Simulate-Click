@@ -44,7 +44,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Comparator;
 
+import static psycho.euphoria.autoclicker.ClickUtils.click;
+import static psycho.euphoria.autoclicker.ClickUtils.swipe;
 import static psycho.euphoria.autoclicker.Shared.requestAccessibilityPermission;
+import static psycho.euphoria.autoclicker.Utils.compareColor;
+import static psycho.euphoria.autoclicker.Utils.getRandomNumber;
 
 public class AutoService extends AccessibilityService {
     private static final String BASE = "psycho.euphoria.autoclicker.";
@@ -261,7 +265,7 @@ public class AutoService extends AccessibilityService {
     void action3() {
         new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                ClickUtils.screenShoot11(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
+                Utils.key(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this, Keys.ACTION1);
                 try {
                     Thread.sleep(ClickUtils.getRandomNumber(3, 5) * 1000);
                 } catch (InterruptedException e) {
@@ -310,9 +314,38 @@ public class AutoService extends AccessibilityService {
     void action10() {
         new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
-                ClickUtils.screenShoot3(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
+                Utils.shoot(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this, (decoded) -> {
+
+                    int number = getRandomNumber(0, 100);
+                    if (number > 40 && compareColor(40, decoded,
+                            955, 958, -1053205,
+                            980, 968, -921619,
+                            986, 946, -921619)) {
+                        click(this, getRandomNumber(969, 1024), getRandomNumber(978, 1019));
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    if (compareColor(40, decoded,
+                            369,1728,-185516
+//                            ,395,1738,-185516,
+//                            418,1722,-185512
+                            )) {
+                        click(this, getRandomNumber(310, 550), getRandomNumber(1780, 1860));
+
+                    }
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    swipe(this, getRandomNumber(300, 340), ClickUtils.getRandomNumber(1280, 1480), ClickUtils.getRandomNumber(340, 380), ClickUtils.getRandomNumber(380, 680));
+                    return null;
+                });
                 try {
-                    Thread.sleep(ClickUtils.getRandomNumber(10, 15) * 1000);
+                    Thread.sleep(ClickUtils.getRandomNumber(5, 10) * 1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
