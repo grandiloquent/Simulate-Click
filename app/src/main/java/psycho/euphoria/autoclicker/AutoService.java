@@ -308,6 +308,16 @@ public class AutoService extends AccessibilityService {
     }
 
     void action10() {
+        new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                ClickUtils.screenShoot3(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this);
+                try {
+                    Thread.sleep(ClickUtils.getRandomNumber(10, 15) * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
     }
 
 }
