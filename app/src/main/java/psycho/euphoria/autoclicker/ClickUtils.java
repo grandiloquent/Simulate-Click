@@ -352,10 +352,20 @@ public class ClickUtils {
 //                        Log.e("B5aOx2", String.format("screenShoot11, %s", "5"));
 //                        click(accessibilityService, getRandomNumber(1011, 1025), getRandomNumber(144, 155));
 //                    }
-                    if (compareColor(20, decoded,
-                            925, 345, -789527,
-                            956, 347, -262149,
-                            973, 346, -1537)) {
+                    if (compareColor(40, decoded,
+                            926, 341, -789001,
+                            926, 358, -789001,
+                            967, 356, -1052687,
+                            929,330,-932012) || compareColor(40, decoded,
+                            936, 345, -1,
+                            954, 347, -1,
+                            973, 346, -1,
+                            926,298,-10824725)||compareColor(40, decoded,
+                            924,340,-265221,
+                            947,340,-513,
+                            972,340,-513     ,
+                            967,321,-9744147
+                            )) {
                         Log.e("B5aOx2", String.format("screenShoot11, %s", "5"));
                         click(accessibilityService, getRandomNumber(1011, 1025), getRandomNumber(144, 155));
 
@@ -417,6 +427,20 @@ public class ClickUtils {
                         Log.e("B5aOx2", String.format("screenShoot11, %s", "8"));
                         click(accessibilityService, getRandomNumber(515, 570), getRandomNumber(1515, 1525));
                         Thread.sleep(1000);
+                    }
+                    if (compareColor(20, decoded,
+                            482, 1325, -6447715,
+                            482, 1346, -6710887,
+                            593, 1320, -1)) {
+                        Log.e("B5aOx2", String.format("screenShoot2, %s", "3"));
+                        click(accessibilityService, getRandomNumber(300, 780), getRandomNumber(1320, 1380));
+                    }
+                    if (compareColor(20, decoded,
+                            482, 1325, -6447715,
+                            482, 1346, -6710887,
+                            593, 1320, -1)) {
+                        Log.e("B5aOx2", String.format("screenShoot11, %s", "9"));
+                        click(accessibilityService, getRandomNumber(480, 602), getRandomNumber(1456, 1483));
                     }
                     decoded.recycle();
                     image.close();
