@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
@@ -47,6 +48,7 @@ import java.util.Comparator;
 import static psycho.euphoria.autoclicker.ClickUtils.click;
 import static psycho.euphoria.autoclicker.ClickUtils.swipe;
 import static psycho.euphoria.autoclicker.Shared.requestAccessibilityPermission;
+import static psycho.euphoria.autoclicker.Utils.checkIfColorIsRange;
 import static psycho.euphoria.autoclicker.Utils.compareColor;
 import static psycho.euphoria.autoclicker.Utils.getRandomNumber;
 
@@ -64,6 +66,11 @@ public class AutoService extends AccessibilityService {
     public static final String ACTION_8 = BASE + "ACTION_8";
     public static final String ACTION_9 = BASE + "ACTION_9";
     public static final String ACTION_10 = BASE + "ACTION_10";
+    public static final String ACTION_11 = BASE + "ACTION_11";
+    public static final String ACTION_12 = BASE + "ACTION_12";
+    public static final String ACTION_13 = BASE + "ACTION_13";
+    public static final String ACTION_14 = BASE + "ACTION_14";
+    public static final String ACTION_15 = BASE + "ACTION_15";
     private static final Object sSync = new Object();
     Handler mHandler;
     private MediaProjectionManager mMediaProjectionManager;
@@ -91,6 +98,16 @@ public class AutoService extends AccessibilityService {
                 .setAction(ACTION_9), PendingIntent.FLAG_IMMUTABLE));
         notificationLayout.setOnClickPendingIntent(R.id.action10, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
                 .setAction(ACTION_10), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action11, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_11), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action12, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_12), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action13, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_13), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action14, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_14), PendingIntent.FLAG_IMMUTABLE));
+        notificationLayout.setOnClickPendingIntent(R.id.action15, PendingIntent.getService(this, 0, new Intent(this, AutoService.class)
+                .setAction(ACTION_15), PendingIntent.FLAG_IMMUTABLE));
         Notification.Builder builder = new Notification.Builder(this.getApplicationContext()); //获取一个Notification构造器
 //        Intent nfIntent = new Intent(this, MainActivity.class); //点击后跳转的界面，可以设置跳转数据
 //        builder.setContentIntent(PendingIntent.getActivity(this, 0, nfIntent, 0)) // 设置PendingIntent
@@ -244,6 +261,16 @@ public class AutoService extends AccessibilityService {
             action9();
         } else if (ACTION_10.equals(action)) {
             action10();
+        } else if (ACTION_11.equals(action)) {
+            action11();
+        } else if (ACTION_12.equals(action)) {
+            action12();
+        } else if (ACTION_13.equals(action)) {
+            action13();
+        } else if (ACTION_14.equals(action)) {
+            action14();
+        } else if (ACTION_15.equals(action)) {
+            action15();
         }
         return result;
     }
@@ -267,7 +294,7 @@ public class AutoService extends AccessibilityService {
             for (int i = 0; i < 1000; i++) {
                 Utils.key(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this, Keys.ACTION1);
                 try {
-                    Thread.sleep(ClickUtils.getRandomNumber(3, 5) * 1000);
+                    Thread.sleep(ClickUtils.getRandomNumber(5, 8) * 1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -315,7 +342,6 @@ public class AutoService extends AccessibilityService {
         new Thread(() -> {
             for (int i = 0; i < 1000; i++) {
                 Utils.shoot(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this, (decoded) -> {
-
                     int number = getRandomNumber(0, 100);
                     if (number > 40 && compareColor(40, decoded,
                             955, 958, -1053205,
@@ -328,16 +354,18 @@ public class AutoService extends AccessibilityService {
                             throw new RuntimeException(e);
                         }
                     }
-                    if (compareColor(40, decoded,
-                            369,1728,-185516
-//                            ,395,1738,-185516,
-//                            418,1722,-185512
-                            )) {
+                    if (
+                            checkIfColorIsRange(decoded, 290, 1720, (red) -> {
+                                return red > 200;
+                            }, (green) -> {
+                                return green < 80;
+                            }, (blue) -> {
+                                return blue < 100;
+                            })) {
                         click(this, getRandomNumber(310, 550), getRandomNumber(1780, 1860));
-
                     }
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -351,6 +379,33 @@ public class AutoService extends AccessibilityService {
                 }
             }
         }).start();
+    }
+
+    void action11() {
+    }
+
+    void action12() {
+        mHandler.postDelayed(() -> {
+            new Thread(() -> {
+                for (int i = 0; i < 1000; i++) {
+                    try {
+                        Keys.action121(this, mIntent, mMediaProjectionManager, mHandler);
+                        Thread.sleep(ClickUtils.getRandomNumber(5, 10) * 1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }).start();
+        }, 3000);
+    }
+
+    void action13() {
+    }
+
+    void action14() {
+    }
+
+    void action15() {
     }
 
 }

@@ -6,14 +6,18 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.ImageFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
+import android.hardware.display.VirtualDisplay.Callback;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -33,6 +37,25 @@ import static psycho.euphoria.autoclicker.Shared.requestAccessibilityPermission;
 public class Utils {
 
     static boolean founded = false;
+
+    public static boolean checkIfColorIsRange(Bitmap bitmap, int x, int y, Function<Integer, Boolean> fr,
+                                              Function<Integer, Boolean> fg, Function<Integer, Boolean> fb) {
+        int color = bitmap.getPixel(x, y);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        Log.e("B5aOx2", String.format("checkIfColorIsRange, %sx%s = %s = %s,%s,%s", x, y, color, red, green, blue));
+        return fr.apply(red) && fg.apply(green) && fb.apply(blue);
+        /*
+        checkIfColorIsRange(decoded, 290, 1720, (red) -> {
+                                return red > 200;
+                            }, (green) -> {
+                                return green < 80;
+                            }, (blue) -> {
+                                return blue < 100;
+
+         */
+    }
 
     public static boolean compareColor(int color, int red, int redOffset, int green, int greenOffset, int blue, int blueOffset) {
         int r = (color >> 16) & 0xFF;
@@ -88,7 +111,7 @@ public class Utils {
             int r = (value >> 16) & 0xFF;
             int g = (value >> 8) & 0xFF;
             int b = value & 0xFF;
-            Log.e("B5aOx2", String.format("compareColor,%s %s %s %s %s %s %s %s %s %s", values[i], values[i + 1], color, value, red, r, green, g, blue, b));
+            //Log.e("B5aOx2", String.format("compareColor,%s %s %s %s %s %s %s %s %s %s", values[i], values[i + 1], color, value, red, r, green, g, blue, b));
             if (r < red - offset || r > red + offset ||
                     g < green - offset || g > green + offset ||
                     b < blue - offset || b > blue + offset
@@ -168,11 +191,27 @@ public class Utils {
             int width = metrics.widthPixels;
             int height = metrics.heightPixels;
             final ImageReader ir = ImageReader.newInstance(width, height, 0x01, 1);
+            VirtualDisplay.Callback callback = new Callback() {
+                @Override
+                public void onPaused() {
+                    super.onPaused();
+                }
+
+                @Override
+                public void onResumed() {
+                    super.onResumed();
+                }
+
+                @Override
+                public void onStopped() {
+                    super.onStopped();
+                }
+            };
             VirtualDisplay vd = projection.createVirtualDisplay("screen", width, height, metrics.densityDpi,
-                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, ir.getSurface(), null, null);
+                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, ir.getSurface(), callback, handler);
             //  @Override
             founded = false;
-            ir.setOnImageAvailableListener(reader -> {
+            ImageReader.OnImageAvailableListener listener = reader -> {
                 projection.stop();
                 if (founded) {
                     return;
@@ -180,6 +219,7 @@ public class Utils {
                 founded = true;
                 Image image = null;
                 Bitmap bitmap = null;
+                Bitmap decoded = null;
                 try {
                     image = ir.acquireLatestImage();
                     final Image.Plane[] planes = image.getPlanes();
@@ -192,25 +232,30 @@ public class Utils {
                     bitmap.copyPixelsFromBuffer(buffer);
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     bitmap.compress(CompressFormat.JPEG, 85, out);
-                    bitmap.recycle();
-                    Bitmap decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
+                    decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
                     action.apply(decoded);
                     decoded.recycle();
-                    image.close();
+
 
                 } catch (Exception e) {
                 } finally {
                     if (bitmap != null) {
                         bitmap.recycle();
                     }
+                    if (decoded != null) {
+                        decoded.recycle();
+                    }
                     if (image != null) {
                         image.close();
                     }
+                    //ir.discardFreeBuffers();
+                    ir.setOnImageAvailableListener(null, null);
                     ir.close();
                     vd.release();
                 }
 
-            }, handler);
+            };
+            ir.setOnImageAvailableListener(listener, handler);
         }
     }
 

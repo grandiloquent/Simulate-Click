@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Path;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
+import android.hardware.display.VirtualDisplay.Callback;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.ImageReader.OnImageAvailableListener;
@@ -84,7 +85,22 @@ public class ClickUtils {
             int height = metrics.heightPixels;
             final ImageReader ir = ImageReader.newInstance(width, height, 0x01, 1);
             VirtualDisplay vd = projection.createVirtualDisplay("screen", width, height, metrics.densityDpi,
-                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, ir.getSurface(), null, null);
+                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, ir.getSurface(), new Callback() {
+                        @Override
+                        public void onPaused() {
+                            super.onPaused();
+                        }
+
+                        @Override
+                        public void onResumed() {
+                            super.onResumed();
+                        }
+
+                        @Override
+                        public void onStopped() {
+                            super.onStopped();
+                        }
+                    }, handler);
             founded = false;
             ir.setOnImageAvailableListener(reader -> {
                 projection.stop();
@@ -109,9 +125,19 @@ public class ClickUtils {
                     bitmap.copyPixelsFromBuffer(buffer);
                     bitmap.compress(CompressFormat.JPEG, 85, fos);
                     bitmap.recycle();
-                    image.close();
 
                 } catch (Exception e) {
+                } finally {
+                    if (bitmap != null) {
+                        bitmap.recycle();
+                    }
+                    if (image != null) {
+                        image.close();
+                    }
+                    //ir.discardFreeBuffers();
+                    ir.setOnImageAvailableListener(null, null);
+                    ir.close();
+                    vd.release();
                 }
 
             }, handler);
@@ -279,7 +305,6 @@ public class ClickUtils {
         }
 
     }
-
 
 
     public static void screenshot(Context context) {

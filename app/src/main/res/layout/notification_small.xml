@@ -47,7 +47,7 @@
 
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -59,24 +59,28 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="服务" />
+
         <TextView
             android:id="@+id/action7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="退出" />
+
         <TextView
             android:id="@+id/action8"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="动作8" />
+
         <TextView
             android:id="@+id/action9"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="动作9" />
+
         <TextView
             android:id="@+id/action10"
             android:layout_width="0dp"
@@ -85,4 +89,49 @@
             android:text="动作10" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/action11"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="动作11" />
+
+        <TextView
+            android:id="@+id/action12"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="动作12" />
+
+        <TextView
+            android:id="@+id/action13"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="动作13" />
+
+        <TextView
+            android:id="@+id/action14"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="动作14" />
+
+        <TextView
+            android:id="@+id/action15"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="动作15" />
+
+
+    </LinearLayout>
+
 </LinearLayout>
