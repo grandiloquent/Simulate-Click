@@ -294,7 +294,7 @@ public class AutoService extends AccessibilityService {
             for (int i = 0; i < 1000; i++) {
                 Utils.key(mIntent, EXTRA_RESULT_CODE, getResources().getDisplayMetrics(), mMediaProjectionManager, mHandler, this, Keys.ACTION1);
                 try {
-                    Thread.sleep(ClickUtils.getRandomNumber(5, 8) * 1000);
+                    Thread.sleep(ClickUtils.getRandomNumber(3, 5) * 1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

@@ -21,6 +21,7 @@ import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Display;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -184,6 +185,8 @@ public class Utils {
                 });
     }
 
+    private static List<VirtualDisplay> sVirtualDisplays = new ArrayList<>();
+
     public static void shoot(final Intent intent, String name, final DisplayMetrics metrics, MediaProjectionManager mediaProjectionManager, Handler handler, AccessibilityService accessibilityService, Function<Bitmap, Void> action) {
         final int resultCode = intent.getIntExtra(name, 0);
         final MediaProjection projection = mediaProjectionManager.getMediaProjection(resultCode, intent);
@@ -207,16 +210,35 @@ public class Utils {
                     super.onStopped();
                 }
             };
+            if (sVirtualDisplays.size() > 0) {
+                VirtualDisplay v = sVirtualDisplays.get(0);
+                v.setSurface(null);
+                v.release();
+                sVirtualDisplays.remove(v);
+                v = null;
+
+            }
             VirtualDisplay vd = projection.createVirtualDisplay("screen", width, height, metrics.densityDpi,
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, ir.getSurface(), callback, handler);
-            //  @Override
-            founded = false;
-            ImageReader.OnImageAvailableListener listener = reader -> {
-                projection.stop();
-                if (founded) {
-                    return;
+            //sVirtualDisplays.add(vd);
+            MediaProjection.Callback callback1 = new MediaProjection.Callback() {
+                @Override
+                public void onStop() {
+                    vd.release();
+                    ir.setOnImageAvailableListener(null, null);
+                    projection.unregisterCallback(this);
+                    DisplayManager disp = (DisplayManager) accessibilityService.getSystemService(Context.DISPLAY_SERVICE);
+                    Display[] allDisplays = disp.getDisplays(DisplayManager.DISPLAY_CATEGORY_PRESENTATION);
+                    for (Display dl : allDisplays) {
+                        Log.e("B5aOx2", "Display name: " + allDisplays.length + " " + dl.getName() + " Display id: " + dl.getDisplayId());
+                    }
                 }
-                founded = true;
+            };
+            projection.registerCallback(callback1, handler);
+            //  @Override
+            ImageReader.OnImageAvailableListener listener = reader -> {
+
+                projection.stop();
                 Image image = null;
                 Bitmap bitmap = null;
                 Bitmap decoded = null;
@@ -249,9 +271,9 @@ public class Utils {
                         image.close();
                     }
                     //ir.discardFreeBuffers();
-                    ir.setOnImageAvailableListener(null, null);
+
+                    ir.getSurface().release();
                     ir.close();
-                    vd.release();
                 }
 
             };
